@@ -7,7 +7,9 @@ async function UsersList() {
     const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/users`, {
       cache: 'no-store' // 禁用缓存，每次请求都获取最新数据
     });
-    
+    console.log(`Request URL: ${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/users`);
+    console.log(`Response: ${response}`); 
+
     if (!response.ok) {
       throw new Error('获取用户数据失败');
     }
@@ -29,6 +31,7 @@ async function UsersList() {
       </div>
     );
   } catch (error) {
+    console.log(`Error: ${error}`);
     return (
       <div className="p-4 border rounded-lg bg-red-50 dark:bg-red-900/20">
         <h3 className="text-lg font-semibold text-red-800 dark:text-red-200">用户列表</h3>
@@ -44,6 +47,9 @@ async function GreetingMessage() {
     const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/hello`, {
       next: { revalidate: 60 } // 缓存60秒
     });
+
+    console.log(`Request URL: ${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/users`);
+    console.log(`Response: ${response}`); 
     
     if (!response.ok) {
       throw new Error('获取问候消息失败');
@@ -61,6 +67,7 @@ async function GreetingMessage() {
       </div>
     );
   } catch (error) {
+    console.log(`Error: ${error}`);
     return (
       <div className="p-4 border rounded-lg bg-red-50 dark:bg-red-900/20">
         <h3 className="text-lg font-semibold text-red-800 dark:text-red-200">问候消息</h3>
