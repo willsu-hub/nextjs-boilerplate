@@ -20,6 +20,10 @@ const nextConfig = {
       },
     ];
   },
+  // 配置输出模式
+  output: 'standalone',
+  // 配置动态渲染
+  dynamicParams: true,
 };
 
 module.exports = nextConfig;
