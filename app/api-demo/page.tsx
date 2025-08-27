@@ -1,26 +1,17 @@
 import { Suspense } from 'react';
+import { userApi, helloApi } from '@/lib/api';
 
 // 服务端组件 - 获取用户数据
 async function UsersList() {
   try {
-    // 在服务端获取数据，使用相对路径
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || ''}/api/users`, {
-      cache: 'no-store' // 禁用缓存，每次请求都获取最新数据
-    });
-    console.log(`Request URL: ${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/users`);
-    console.log(`Response: ${response}`); 
-
-    if (!response.ok) {
-      throw new Error('获取用户数据失败');
-    }
-    
-    const data = await response.json();
+    const response = await userApi.getAll();
+    console.log(`Response: ${JSON.stringify(response)}`);  
     
     return (
       <div className="space-y-4">
         <h3 className="text-lg font-semibold">用户列表（服务端获取）</h3>
         <div className="grid gap-3">
-          {data.users.map((user: any) => (
+          {response.users.map((user: any) => (
             <div key={user.id} className="p-3 border rounded-lg bg-gray-50 dark:bg-gray-800">
               <div className="font-medium">{user.name}</div>
               <div className="text-sm text-gray-600 dark:text-gray-400">{user.email}</div>
@@ -31,7 +22,6 @@ async function UsersList() {
       </div>
     );
   } catch (error) {
-    console.log(`Error: ${error}`);
     return (
       <div className="p-4 border rounded-lg bg-red-50 dark:bg-red-900/20">
         <h3 className="text-lg font-semibold text-red-800 dark:text-red-200">用户列表</h3>
@@ -47,30 +37,19 @@ async function UsersList() {
 // 服务端组件 - 获取问候消息
 async function GreetingMessage() {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || ''}/api/hello`, {
-      next: { revalidate: 60 } // 缓存60秒
-    });
-
-    console.log(`Request URL: ${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/users`);
-    console.log(`Response: ${response}`); 
-    
-    if (!response.ok) {
-      throw new Error('获取问候消息失败');
-    }
-    
-    const data = await response.json();
+    const response = await helloApi.get();
+    console.log(`Response: ${JSON.stringify(response)}`);  
     
     return (
       <div className="p-4 border rounded-lg bg-green-50 dark:bg-green-900/20">
         <h3 className="text-lg font-semibold text-green-800 dark:text-green-200">问候消息</h3>
-        <p className="text-green-700 dark:text-green-300">{data.message}</p>
+        <p className="text-green-700 dark:text-green-300">{response.message}</p>
         <p className="text-sm text-green-600 dark:text-green-400">
-          时间: {new Date(data.timestamp).toLocaleString('zh-CN')}
+          时间: {new Date(response.timestamp).toLocaleString('zh-CN')}
         </p>
       </div>
     );
   } catch (error) {
-    console.log(`Error: ${error}`);
     return (
       <div className="p-4 border rounded-lg bg-red-50 dark:bg-red-900/20">
         <h3 className="text-lg font-semibold text-red-800 dark:text-red-200">问候消息</h3>

@@ -36,6 +36,7 @@ async function apiRequest<T>(
 ): Promise<ApiResponse<T>> {
   try {
     const url = `${API_BASE_URL}${endpoint}`;
+    console.log(`>>> Request URL: ${url}`);
     const response = await fetch(url, {
       headers: {
         'Content-Type': 'application/json',
@@ -62,7 +63,7 @@ async function apiRequest<T>(
 // 用户相关API函数
 export const userApi = {
   // 获取所有用户
-  async getAll(): Promise<ApiResponse<{ users: User[]; total: number }>> {
+  async getAll(): Promise<ApiResponse<{ users: User[]; total: number, status: string }>> {
     return apiRequest('/api/users');
   },
 
