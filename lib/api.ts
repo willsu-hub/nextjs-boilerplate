@@ -36,7 +36,7 @@ async function apiRequest<T>(
 ): Promise<T> {
   try {
     const url = `${API_BASE_URL}${endpoint}`;
-    console.log(`>>> Request URL: ${url}`);
+    console.warn(`>>> Request URL: ${url}`);
     const response = await fetch(url, {
       headers: {
         'Content-Type': 'application/json',
@@ -44,6 +44,7 @@ async function apiRequest<T>(
       },
       ...options,
     });
+    console.warn(`Response: ${JSON.stringify(response)}`); 
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));

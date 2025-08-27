@@ -5,7 +5,6 @@ import { userApi, helloApi } from '@/lib/api';
 async function UsersList() {
   try {
     const response = await userApi.getAll();
-    console.log(`Response: ${JSON.stringify(response)}`);  
     
     if (response.status !== 'success') {
       throw new Error('获取用户数据失败');
@@ -42,7 +41,6 @@ async function UsersList() {
 async function GreetingMessage() {
   try {
     const response = await helloApi.get();
-    console.log(`Response: ${JSON.stringify(response)}`);  
     
     return (
       <div className="p-4 border rounded-lg bg-green-50 dark:bg-green-900/20">
