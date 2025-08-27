@@ -9,10 +9,11 @@ const mockUsers = [
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const id = parseInt(params.id);
-  const user = mockUsers.find(u => u.id === id);
+  const { id } = await params;
+  const userId = parseInt(id);
+  const user = mockUsers.find(u => u.id === userId);
   
   if (!user) {
     return NextResponse.json(
@@ -26,11 +27,12 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = parseInt(params.id);
-    const userIndex = mockUsers.findIndex(u => u.id === id);
+    const { id } = await params;
+    const userId = parseInt(id);
+    const userIndex = mockUsers.findIndex(u => u.id === userId);
     
     if (userIndex === -1) {
       return NextResponse.json(
@@ -45,7 +47,7 @@ export async function PUT(
     mockUsers[userIndex] = {
       ...mockUsers[userIndex],
       ...body,
-      id // 确保ID不被修改
+      id: userId // 确保ID不被修改
     };
     
     return NextResponse.json({
@@ -64,10 +66,11 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const id = parseInt(params.id);
-  const userIndex = mockUsers.findIndex(u => u.id === id);
+  const { id } = await params;
+  const userId = parseInt(id);
+  const userIndex = mockUsers.findIndex(u => u.id === userId);
   
   if (userIndex === -1) {
     return NextResponse.json(
