@@ -7,6 +7,10 @@ async function UsersList() {
     const response = await userApi.getAll();
     console.log(`Response: ${JSON.stringify(response)}`);  
     
+    if (response.status !== 'success') {
+      throw new Error('获取用户数据失败');
+    }
+    
     return (
       <div className="space-y-4">
         <h3 className="text-lg font-semibold">用户列表（服务端获取）</h3>

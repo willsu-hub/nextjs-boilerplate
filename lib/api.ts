@@ -33,7 +33,7 @@ export interface UpdateUserRequest {
 async function apiRequest<T>(
   endpoint: string,
   options: RequestInit = {}
-): Promise<ApiResponse<T>> {
+): Promise<T> {
   try {
     const url = `${API_BASE_URL}${endpoint}`;
     console.log(`>>> Request URL: ${url}`);
@@ -53,27 +53,24 @@ async function apiRequest<T>(
     const data = await response.json();
     return data;
   } catch (error) {
-    return {
-      status: 'error',
-      error: error instanceof Error ? error.message : '未知错误',
-    };
+    throw new Error(error instanceof Error ? error.message : '未知错误');
   }
 }
 
 // 用户相关API函数
 export const userApi = {
   // 获取所有用户
-  async getAll(): Promise<ApiResponse<{ users: User[]; total: number, status: string }>> {
+  async getAll(): Promise<{ users: User[]; total: number, status: string }> {
     return apiRequest('/api/users');
   },
 
   // 获取单个用户
-  async getById(id: number): Promise<ApiResponse<{ user: User }>> {
+  async getById(id: number): Promise<{ user: User }> {
     return apiRequest(`/api/users/${id}`);
   },
 
   // 创建用户
-  async create(userData: CreateUserRequest): Promise<ApiResponse<{ user: User }>> {
+  async create(userData: CreateUserRequest): Promise<{ user: User }> {
     return apiRequest('/api/users', {
       method: 'POST',
       body: JSON.stringify(userData),
@@ -81,7 +78,7 @@ export const userApi = {
   },
 
   // 更新用户
-  async update(id: number, userData: UpdateUserRequest): Promise<ApiResponse<{ user: User }>> {
+  async update(id: number, userData: UpdateUserRequest): Promise<{ user: User }> {
     return apiRequest(`/api/users/${id}`, {
       method: 'PUT',
       body: JSON.stringify(userData),
@@ -89,7 +86,7 @@ export const userApi = {
   },
 
   // 删除用户
-  async delete(id: number): Promise<ApiResponse<{ deletedUser: User }>> {
+  async delete(id: number): Promise<{ deletedUser: User }> {
     return apiRequest(`/api/users/${id}`, {
       method: 'DELETE',
     });
@@ -99,12 +96,12 @@ export const userApi = {
 // 问候API函数
 export const helloApi = {
   // 获取问候消息
-  async get(): Promise<ApiResponse<{ message: string; timestamp: string }>> {
+  async get(): Promise<{ message: string; timestamp: string }> {
     return apiRequest('/api/hello');
   },
 
   // 发送数据到问候API
-  async post(data: any): Promise<ApiResponse<{ receivedData: any; timestamp: string }>> {
+  async post(data: any): Promise<{ receivedData: any; timestamp: string }> {
     return apiRequest('/api/hello', {
       method: 'POST',
       body: JSON.stringify(data),
